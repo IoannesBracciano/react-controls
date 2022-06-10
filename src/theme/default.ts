@@ -40,7 +40,7 @@ const accent = {
 }
 
 const border = {
-  radius: ['0', '1.2em']
+  radius: ['0', '1.2em', '0.25em']
 }
 
 const spacing = {
@@ -84,7 +84,12 @@ const layout = {
   }
 }
 
-const shadow = ['0 0.1em 0.2em 0.1em', '0 0.1em 0.5em 0.2em', '0 0 0 0']
+const shadow = [
+  '0 0.1em 0.2em 0.1em',
+  '0 0.1em 0.5em 0.2em',
+  '0 0 0 0',
+  '0em 0.05em 0.1em 0'
+]
 
 const typography = {
   font: {

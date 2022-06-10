@@ -102,6 +102,10 @@ export const ThemeResolver = {
 }
 
 export const focusoutline = (selector?: ':after' | ':before') => css`
+  &:focus,
+  &:focus-visible {
+    outline: none;
+  }
   &${selector || ''} {
     border: 1px solid transparent;
     outline: 3px solid transparent;
