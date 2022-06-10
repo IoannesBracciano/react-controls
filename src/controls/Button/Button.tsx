@@ -4,6 +4,7 @@ import React, { memo, useCallback } from 'react'
 import styled, { css } from 'styled-components'
 import {
   brightness,
+  container,
   focusoutline,
   raise,
   surface,
@@ -80,7 +81,8 @@ const EnabledState = css`
 `
 
 const StyledButton = memo(styled('button')<Omit<ButtonProps, 'children'>>`
-  ${({ accent, size }) => surface({ accent, scale: size })}
+  ${({ size }) => container({ spacing: 7, scale: size })}
+  ${({ accent }) => surface({ accent })}
   ${focusoutline()}
   ${({ disabled, spinning }) =>
     !(disabled || spinning)
