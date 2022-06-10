@@ -1,0 +1,23 @@
+.btn {
+  border-radius: 8px;
+}
+.btn.attention {
+  background-color: #f5d862;
+  color: black;
+}
+.btn.danger {
+  background-color: #d02547;
+  color: white;
+}
+.btn.primary {
+  background-color: #7f1eed;
+  color: white;
+}
+.btn.secondary {
+  background-color: #cac8e8;
+  color: black;
+}
+.btn.success {
+  background-color: #7ff672;
+  color: black;
+}
