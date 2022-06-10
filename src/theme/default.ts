@@ -43,9 +43,40 @@ const border = {
   radius: ['0', '1.2em']
 }
 
+const spacing = {
+  horizontal: [
+    '0',
+    '0.1em',
+    '0.2em',
+    '0.3em',
+    '0.5em',
+    '0.7em',
+    '0.9em',
+    '1.1em',
+    '1.4em',
+    '1.7em',
+    '2.0em',
+    '2.4em'
+  ],
+  vertical: [
+    '0',
+    '0.05em',
+    '0.1em',
+    '0.15em',
+    '0.2em',
+    '0.3em',
+    '0.4em',
+    '0.5em',
+    '0.7em',
+    '0.9em',
+    '1.1em',
+    '1.3em'
+  ]
+}
+
 const layout = {
   content: {
-    padding: '0.5em 1.1em'
+    padding: ['0.5em 1.1em']
   },
   spacing: {
     comfy: ['1.2em', '0.4em'],
@@ -76,5 +107,6 @@ export default {
   layout,
   palette,
   shadow,
+  spacing,
   typography
 }
