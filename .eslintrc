@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "extends": [
-    "standard",
+    // "standard",
     "standard-react",
     "plugin:prettier/recommended",
     "prettier/standard",
