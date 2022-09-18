@@ -3,6 +3,7 @@ import * as icons from '@fortawesome/free-solid-svg-icons'
 import React, { useCallback, useState } from 'react'
 import { ThemeProvider } from 'styled-components'
 import { Button } from '.'
+import { ButtonGroup } from '../../layout/button-group/ButtonGroup'
 import defaultTheme from '../../theme/default'
 import { ButtonProps } from './Button'
 
@@ -93,9 +94,15 @@ export default {
 //   </ThemeProvider>
 // )
 
-const ShowcaseTemplate = (props: ButtonProps & { label?: string }) => (
+const ShowcaseTemplate = ({
+  icon,
+  ...props
+}: ButtonProps & { label?: string }) => (
   <ThemeProvider theme={defaultTheme}>
-    <Button {...props}>{props.label}</Button>
+    <ButtonGroup>
+      <Button {...props}>{props.label}</Button>
+      <Button icon={icon || icons.faFrog} {...props} />
+    </ButtonGroup>
   </ThemeProvider>
 )
 
@@ -129,7 +136,7 @@ const BusyContextTemplate = () => {
       <Button
         spinning={busy.primary}
         icon={icons.faDownload}
-        onClick={() => onClick('primary')}
+        onPress={() => onClick('primary')}
         size='lg'
       >
         Download
@@ -137,14 +144,14 @@ const BusyContextTemplate = () => {
       <Button
         spinning={busy.secondary}
         icon={icons.faSave}
-        onClick={() => onClick('secondary')}
+        onPress={() => onClick('secondary')}
         accent='success'
         size='md'
       />
       <Button
         spinning={busy.attention}
         icon={icons.faHdd}
-        onClick={() => onClick('attention')}
+        onPress={() => onClick('attention')}
         accent='warning'
         size='md'
       >
@@ -152,7 +159,7 @@ const BusyContextTemplate = () => {
       </Button>
       <Button
         spinning={busy.danger}
-        onClick={() => onClick('danger')}
+        onPress={() => onClick('danger')}
         size='sm'
         accent='error'
         flat
