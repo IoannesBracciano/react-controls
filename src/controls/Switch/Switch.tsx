@@ -1,6 +1,13 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { brightness, container, focusoutline, rect, solid } from '../../theming'
+import {
+  brightness,
+  container,
+  focusoutline,
+  raise,
+  rect,
+  solid
+} from '../../theming'
 
 const StyledInput = styled('input')<
   Omit<SwitchProps, 'size'> & { scale: 'sm' | 'md' | 'lg' | undefined }
@@ -24,10 +31,13 @@ const StyledInput = styled('input')<
   }
 
   &:after {
-    ${solid('#dbdbdb')}
+    ${({ theme }) => {
+      const solidBgLightGray = theme.palette.gray['30']
+      return solid(solidBgLightGray)
+    }}
     ${rect({
       height: '1.4em',
-      radiusIndex: 1,
+      radiusIndex: 3,
       width: '2.2em'
     })}
     content: '';
@@ -36,10 +46,10 @@ const StyledInput = styled('input')<
   }
 
   &:before {
-    ${solid('#fafafa')}
+    ${solid('#ffffff')}
     ${rect({
       height: '1em',
-      radiusIndex: 1,
+      radiusIndex: 3,
       width: '1em'
     })}
     content: '';
@@ -53,12 +63,15 @@ const StyledInput = styled('input')<
   }
 
   &:checked:after {
-    ${({ accent: variant }) => solid(variant)};
+    ${({ accent, theme }) => {
+      const bg = theme.background.solid[accent]
+      return solid(bg)
+    }}
   }
 
   &:focus::before,
   &:hover:before {
-    box-shadow: 0 0 0.2em 0 #00000020;
+    ${raise(1, 'neutral')}
   }
 
   &:checked:before {
@@ -67,13 +80,30 @@ const StyledInput = styled('input')<
 `
 
 export interface SwitchProps {
+  /**
+   * Set the initial state of the switch.
+   */
   on?: boolean
+  /**
+   * Get notified whenever the state of the switch is toggled.
+   */
   onToggle?: (isOn: boolean) => void
+  /**
+   * Choose from 3 standard control sizes calculated based on the
+   * applied theme's base font size.
+   */
   size?: 'sm' | 'md' | 'lg'
   style?: React.CSSProperties
+  /**
+   * Choose the color variation of the control.
+   */
   accent: 'error' | 'primary' | 'secondary' | 'success' | 'warning'
 }
 
+/**
+ * Switches let users turn things on and off or less often switch
+ * between other binary opposite states.
+ */
 export const Switch = ({ on, onToggle, size, style, accent }: SwitchProps) => {
   const [isOn, setIsOn] = useState(!!on)
   const onChange = useCallback<
