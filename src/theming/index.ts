@@ -1,4 +1,10 @@
-import { css, FlattenInterpolation, ThemeProps } from 'styled-components'
+import {
+  css,
+  FlattenInterpolation,
+  FlattenSimpleInterpolation,
+  StyledComponent,
+  ThemeProps
+} from 'styled-components'
 import { rgb } from './rgb'
 
 export type AccentName =
@@ -10,16 +16,42 @@ export type AccentName =
 
 export type Scale = 'sm' | 'md' | 'lg'
 
+export type ColorPalette = {
+  base: string
+}
+
 export interface Theme {
   accent: {
-    error: string
-    primary: string
-    secondary: string
-    success: string
-    warning: string
+    base: {
+      error: string
+      primary: string
+      secondary: string
+      success: string
+      warning: string
+    }
+    palette: {
+      error: string
+      primary: string
+      secondary: string
+      success: string
+      warning: string
+    }
   }
   border: {
     radius: string
+  }
+  drop: {
+    bottom: string[]
+    color: {
+      error: string
+      primary: string
+      secondary: string
+      success: string
+      warning: string
+    }
+    left: string[]
+    right: string[]
+    top: string[]
   }
   layout: {
     container: {
@@ -60,10 +92,15 @@ export interface Theme {
 }
 
 export const ThemeResolver = {
-  getAccentColor:
+  getAccentBaseColor:
+    (accentName: string) =>
+    ({ theme }: ThemeProps<Theme>) => {
+      return theme.accent.base[accentName]
+    },
+  getAccentPalette:
     (accentName: string) =>
     ({ theme }: ThemeProps<Theme>) =>
-      theme.accent[accentName],
+      theme.accent.palette[accentName],
   getBaseFontSize:
     (size: Scale) =>
     ({ theme }: ThemeProps<Theme>) => {
@@ -81,10 +118,12 @@ export const ThemeResolver = {
         : theme.palette[colorName][tone],
   getInkForAccentedSurface:
     (accentName: string) =>
-    ({ theme }: ThemeProps<Theme>) =>
-      rgb.parseHex(theme.accent[accentName]).toHsl().l() <= 0.65
+    ({ theme }: ThemeProps<Theme>) => {
+      const color = theme.accent.base[accentName]
+      return rgb.parseHex(color).toHsl().l() <= 0.55
         ? theme.typography.ink.white
-        : theme.typography.ink.black,
+        : theme.typography.ink.black
+    },
   getInkForColor:
     (color: string) =>
     ({ theme }: ThemeProps<Theme>) =>
@@ -94,43 +133,47 @@ export const ThemeResolver = {
   getShadow:
     (depthIndex: number, color = '#000000') =>
     ({ theme }: ThemeProps<Theme>) =>
-      `${theme.shadow[depthIndex]} ${color}`,
+      `${theme.drop.bottom[depthIndex]} ${color}`,
   getSpacing:
     (spacingIndex: number) =>
     ({ theme }: ThemeProps<Theme>) =>
       `${theme.spacing.vertical[spacingIndex]} ${theme.spacing.horizontal[spacingIndex]}`
 }
 
-export const focusoutline = (selector?: ':after' | ':before') => css`
+export const focusoutline = (
+  selector?:
+    | ':after'
+    | ':before'
+    | FlattenSimpleInterpolation
+    | StyledComponent<any, any>
+) => css`
   &:focus,
   &:focus-visible {
-    outline: none;
+    outline-color: transparent;
   }
-  &${selector || ''} {
+  &${selector || ''}, & ${selector || ''} {
     border: 1px solid transparent;
     outline: 3px solid transparent;
   }
-  &:focus${selector || ''}, &:focus-visible${selector || ''} {
+  &:focus${selector || ''},
+    &:focus
+    ${selector || ''},
+    &:focus-visible${selector || ''},
+    &:focus-visible
+    ${selector || ''} {
     border-color: ${ThemeResolver.getColor('coralblue', '300')}b8;
     outline-color: ${ThemeResolver.getColor('coralblue', '300')}b8;
   }
 `
-export const raise = (
-  depthIndex: number,
-  on: string[] = [':focus', ':hover'],
-  condition: boolean = true
-) =>
-  condition &&
-  css`
-    ${on.map(
-      (modif) =>
-        css`
-          &${modif} {
-            box-shadow: ${ThemeResolver.getShadow(depthIndex, '#00000020')};
-          }
-        `
-    )}
-  `
+
+export const raise =
+  (level: number, accent: string = 'neutral') =>
+  ({ theme }: ThemeProps<Theme>) =>
+    css`
+      & {
+        box-shadow: ${theme.drop.bottom[level]} ${theme.drop.color[accent]}30;
+      }
+    `
 
 export const brightness = (
   amount: string,
@@ -172,17 +215,19 @@ export const rect = ({
 `
 
 export type ContainerProps = RectProps & {
+  rounded?: number
   scale?: 'sm' | 'md' | 'lg'
   spacing?: number
 }
 
 export const container = ({
   height = 'auto',
+  rounded = 3,
   spacing = 5,
   scale = 'md',
   width = 'auto'
 }: ContainerProps = {}) => css`
-  ${rect({ height, width })}
+  ${rect({ height, width, radiusIndex: rounded })}
   font-size: ${ThemeResolver.getBaseFontSize(scale)};
   padding: ${ThemeResolver.getSpacing(spacing)};
   position: relative;
@@ -199,7 +244,7 @@ export type SurfaceProps = RectProps & {
 export const solid = (color: string) => css`
   background-color: ${color.startsWith('#')
     ? color
-    : ThemeResolver.getAccentColor(color)};
+    : ThemeResolver.getAccentBaseColor(color)};
   color: ${ThemeResolver.getInkForColor(color)};
 `
 
@@ -211,8 +256,7 @@ export const surface = ({
   ${material && material}
   ${accent &&
   css`
-    background-color: ${ThemeResolver.getAccentColor(accent)};
+    background-color: ${ThemeResolver.getAccentBaseColor(accent)};
     color: ${ThemeResolver.getInkForAccentedSurface(accent)};
   `};
-  border-radius: ${ThemeResolver.getBorderRadius(+rounded)};
 `

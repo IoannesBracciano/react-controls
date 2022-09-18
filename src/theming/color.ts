@@ -1,4 +1,3 @@
-
 export function brightness(hex: string) {
   const hspBrightnessCoef = [0.299, 0.587, 0.114]
   const rgbSquared = parse(hex).map((comp) => Math.pow(comp, 2))
