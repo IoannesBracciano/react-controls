@@ -120,7 +120,7 @@ export const ThemeResolver = {
     (accentName: string) =>
     ({ theme }: ThemeProps<Theme>) => {
       const color = theme.accent.base[accentName]
-      return rgb.parseHex(color).toHsl().l() <= 0.55
+      return rgb.parseHex(color).toHsl().l() <= 0.65
         ? theme.typography.ink.white
         : theme.typography.ink.black
     },

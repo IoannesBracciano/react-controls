@@ -1,3 +1,6 @@
+import { fn } from 'runtyped'
+import { str } from 'runtyped/types'
+
 const { abs, max, min, sqrt } = Math
 
 // function Color.parse(hex: string) {
@@ -96,7 +99,7 @@ export function Color(
   // }
 }
 
-Color.parse = function _ColorParseFromHex(hex: string) {
+Color.parse = fn(function _ColorParseFromHex(hex: string = str()) {
   const [r, g, b, a] = hex
     .replace('#', '')
     .padEnd(8, 'f')
@@ -105,7 +108,7 @@ Color.parse = function _ColorParseFromHex(hex: string) {
     .filter(Boolean)
     .map((v) => parseInt(v, 16))
   return Color(r, g, b, a / 255.0)
-}
+})
 
 Color.fromHSLA = function _ColorFromHSLA(
   h: number,

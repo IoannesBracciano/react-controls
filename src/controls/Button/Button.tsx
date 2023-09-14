@@ -70,7 +70,7 @@ const EnabledState = (accent: string) => css`
   ${brightness('97%', [':active'])}
   &:active {
     ${ButtonLabel}, ${ButtonIcon} {
-      transform: scale(0.98);
+      transform: scale(0.992);
     }
   }
   &:focus {
@@ -84,6 +84,19 @@ const EnabledState = (accent: string) => css`
     cursor: pointer;
   }
 `
+
+// const EnabledState = (accent: string) => css`
+//   ${Mixins.actionable}
+//   ${Mixins.pressable}
+//   &:active {
+//     ${ButtonLabel}, ${ButtonIcon} {
+//       transform: scale(0.98);
+//     }
+//   }
+//   &:focus {
+//     z-index: 9;
+//   }
+// `
 
 const StyledButton = styled('button')<Omit<ButtonProps, 'children'>>`
   ${({ size }) => container({ spacing: 7, scale: size })}
@@ -125,7 +138,7 @@ const StyledButton = styled('button')<Omit<ButtonProps, 'children'>>`
       ${brightness('100%', [':focus', ':hover'])}
       ${brightness('97%', [':active'])}
     `}
-  transition: all 0.15s;
+  transition: all 0.12s;
 
   /* Group of buttons */
   .flex {
@@ -219,6 +232,13 @@ const Button = ({
       {spinning && <ButtonSpinner size='1.5em' />}
       {icon && <ButtonIcon icon={icon} />}
       {children && <ButtonLabel>{children}</ButtonLabel>}
+      {/* <OrderedList items={items} by={"lastModified"} direction="asc" selection="multiple">{
+        item => (
+          <OrderedList.Item visible={item.status !== "archived"} selected={item.id === "7155372"}>
+            <h2>{item.name}</h2>
+          </OrderedList.Item>
+        )
+      }</OrderedList> */}
     </StyledButton>
   )
 }
